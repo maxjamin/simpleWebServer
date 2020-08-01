@@ -10,7 +10,7 @@
 #include <arpa/inet.h>
 #include <sys/wait.h>
 #include <signal.h>
-
+#include <iostream>
 
 class Server
 {
@@ -59,16 +59,43 @@ public:
 		//check if not Bound
 		if(p == NULL)
 		{
-			return -1;
+			return 1;
 		}
 		freeaddrinfo(servinfo); //Done with this
 
 		//now Listen
 		if (listen(sockfd, 10) == -1) {
-			return -1;
+			return 1;
 		}
-		return sockfd;
+		return 0;
+	}
 
+	Server(char *argv[])
+	{
+		int test;
+		if ((test = InitializeServer(argv)) != 0)
+		{
+			printf("Failed to Initialize Server\n");
+		}
+	}
+
+
+	// get sockaddr, IPv4 or IPv6:
+	void *get_in_addr(struct sockaddr *sa)
+	{
+	    if (sa->sa_family == AF_INET) {
+	        return &(((struct sockaddr_in*)sa)->sin_addr);
+	    }
+
+	    return &(((struct sockaddr_in6*)sa)->sin6_addr);
+	}
+
+	int mainLoop()
+	{
+		while(1) 
+		{
+			  
+		}
 	}
 
 
@@ -77,7 +104,7 @@ public:
 
 int main(int argc, char *argv[])
 {
-
-
-
+	std::cout << "Starting program.\n";
+	Server *server = new Server(argv);
+	server->mainLoop();
 }
