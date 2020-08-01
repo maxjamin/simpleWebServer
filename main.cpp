@@ -23,7 +23,7 @@ private:
     int yes=1;
     char s[INET6_ADDRSTRLEN];
     int rv;
-	char port[100] = "3485";
+	char port[100] = "3484";
 
 public:
 	int InitializeServer(char *arg[])
@@ -125,7 +125,7 @@ public:
 	            	{
 	            		break;
 	            	}
-	            	if (send(new_fd, "Hello, world!", 13, 0) == -1)
+	            	if (send(new_fd, buf, nbytes, 0) == -1)
 	                	perror("send");
 	            }
 
