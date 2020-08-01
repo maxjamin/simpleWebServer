@@ -1,15 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <errno.h>
 #include <string.h>
+#include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <netdb.h>
 #include <arpa/inet.h>
-#include <sys/wait.h>
-#include <signal.h>
+#include <netdb.h>
+#include <poll.h>
 #include <iostream>
 
 class Server
@@ -19,7 +17,6 @@ private:
 	struct addrinfo hints, *servinfo, *p;
 	struct sockaddr_storage their_addr;
 	socklen_t sin_size;
-	struct sigaction sa;
 	int yes=1;
 	char s[INET6_ADDRSTRLEN];
 	int rv;
@@ -92,9 +89,37 @@ public:
 
 	int mainLoop()
 	{
+
+		// Start off with room for 5 connections
+    	// (We'll realloc as necessary)
+    	int fd_count = 0;
+    	int fd_size = 5;
+    	struct pollfd *pfds = (struct pollfd *)malloc(sizeof *pfds *fd_size);
+
+		// Add the listener to set
+    	pfds[0].fd = sockfd;
+    	pfds[0].events = POLLIN; // Report ready to read on incoming connection
+
+
 		while(1) 
 		{
-			  
+	        int poll_count = poll(pfds, fd_count, -1);
+
+	        if (poll_count == -1) {
+	            perror("poll");
+	            exit(1);
+	        }
+
+	        //loop through connections
+	        for(int i = 0; i < fd_count; i++)
+	        {
+				//check listener for new connections
+
+				//pass connection to new 
+
+
+
+	        }
 		}
 	}
 
